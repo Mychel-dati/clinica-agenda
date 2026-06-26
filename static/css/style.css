@@ -1,0 +1,16 @@
+body {
+  background: #f4f6f9;
+}
+.card {
+  border: none;
+}
+.navbar-brand i {
+  vertical-align: -2px;
+}
+.list-group-item:hover {
+  background: #f8f9fa;
+}
+footer {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 2rem;
+}

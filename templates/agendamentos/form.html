@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block titulo %}Agendamento{% endblock %}
+
+{% block conteudo %}
+<h3 class="mb-4"><i class="bi bi-calendar-plus"></i> {{ 'Editar' if agendamento.id else 'Novo' }} agendamento</h3>
+
+<form method="post" class="card shadow-sm">
+  <div class="card-body row g-3">
+    <div class="col-md-6">
+      <label class="form-label">Paciente *</label>
+      <select name="paciente_id" class="form-select" required>
+        <option value="">Selecione...</option>
+        {% for p in pacientes %}
+        <option value="{{ p.id }}" {{ 'selected' if agendamento.paciente_id == p.id }}>{{ p.nome }}</option>
+        {% endfor %}
+      </select>
+      {% if not pacientes %}<small class="text-danger">Cadastre um paciente antes.</small>{% endif %}
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Profissional *</label>
+      <select name="profissional_id" class="form-select" required>
+        <option value="">Selecione...</option>
+        {% for p in profissionais %}
+        <option value="{{ p.id }}" {{ 'selected' if agendamento.profissional_id == p.id }}>{{ p.nome }}{% if p.especialidade %} ({{ p.especialidade }}){% endif %}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Data *</label>
+      <input type="date" name="data" class="form-control" required
+             value="{{ agendamento.inicio.strftime('%Y-%m-%d') if agendamento.inicio else '' }}">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Hora *</label>
+      <input type="time" name="hora" class="form-control" required
+             value="{{ agendamento.inicio.strftime('%H:%M') if agendamento.inicio else '' }}">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Duracao (min)</label>
+      <input type="number" name="duracao_min" class="form-control" min="5" step="5"
+             value="{{ agendamento.duracao_min or 30 }}">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Procedimento</label>
+      <input type="text" name="procedimento" class="form-control" value="{{ agendamento.procedimento or '' }}">
+    </div>
+    {% if agendamento.id %}
+    <div class="col-md-6">
+      <label class="form-label">Status</label>
+      <select name="status" class="form-select">
+        {% for s in status_choices %}
+        <option value="{{ s }}" {{ 'selected' if agendamento.status == s }}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endif %}
+    <div class="col-12">
+      <label class="form-label">Observacoes</label>
+      <textarea name="observacoes" class="form-control" rows="2">{{ agendamento.observacoes or '' }}</textarea>
+    </div>
+  </div>
+  <div class="card-footer bg-white d-flex gap-2">
+    <button class="btn btn-primary"><i class="bi bi-check-lg"></i> Salvar</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('agendamentos.agenda') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

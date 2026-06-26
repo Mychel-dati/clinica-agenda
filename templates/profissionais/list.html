@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block titulo %}Profissionais{% endblock %}
+
+{% block conteudo %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0"><i class="bi bi-person-badge"></i> Profissionais</h3>
+  <a class="btn btn-primary" href="{{ url_for('profissionais.form') }}"><i class="bi bi-plus-lg"></i> Novo</a>
+</div>
+
+<div class="card shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr><th>Nome</th><th>Especialidade</th><th>Registro</th><th>Cor</th><th>Ativo</th><th class="text-end">Acoes</th></tr>
+      </thead>
+      <tbody>
+        {% for p in profissionais %}
+        <tr>
+          <td><strong>{{ p.nome }}</strong></td>
+          <td>{{ p.especialidade or '-' }}</td>
+          <td>{{ p.registro or '-' }}</td>
+          <td><span class="badge" style="background:{{ p.cor }}">&nbsp;&nbsp;&nbsp;</span></td>
+          <td>{% if p.ativo %}<span class="badge text-bg-success">Sim</span>{% else %}<span class="badge text-bg-secondary">Nao</span>{% endif %}</td>
+          <td class="text-end">
+            <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('profissionais.form', id=p.id) }}"><i class="bi bi-pencil"></i></a>
+            <form class="d-inline" method="post" action="{{ url_for('profissionais.excluir', id=p.id) }}" onsubmit="return confirm('Excluir profissional e seus agendamentos?')">
+              <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center text-muted py-4">Nenhum profissional cadastrado.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
